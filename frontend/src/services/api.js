@@ -45,6 +45,11 @@ export const api = {
       method: "POST",
       body: JSON.stringify(payload),
     }),
+  forgotPassword: (payload) =>
+    request("/auth/forgot-password", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    }),
   me: () => request("/auth/me"),
   updateProfile: (payload) =>
     request("/auth/profile", {

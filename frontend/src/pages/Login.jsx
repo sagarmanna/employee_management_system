@@ -3,6 +3,7 @@ import hero from "../assets/hero.png";
 import { Icon } from "../components/Icons";
 import { useAuth } from "../context/auth";
 import { navigateTo, routes } from "../routes";
+import { api } from "../services/api";
 
 const Login = () => {
   const { login } = useAuth();
@@ -10,6 +11,9 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(false);
   const [error, setError] = useState("");
+  const [forgotOpen, setForgotOpen] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [forgotMessage, setForgotMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   const submit = async (event) => {
@@ -21,6 +25,20 @@ const Login = () => {
       navigateTo(routes.dashboard);
     } catch (err) {
       setError(err.message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const submitForgotPassword = async (event) => {
+    event.preventDefault();
+    setForgotMessage("");
+    setSubmitting(true);
+    try {
+      const { message } = await api.forgotPassword({ email: forgotEmail });
+      setForgotMessage(message);
+    } catch (err) {
+      setForgotMessage(err.message);
     } finally {
       setSubmitting(false);
     }
@@ -83,7 +101,16 @@ const Login = () => {
               />
               Remember me
             </label>
-            <button type="button">Forgot Password?</button>
+            <button
+              type="button"
+              onClick={() => {
+                setForgotEmail(form.email);
+                setForgotOpen(true);
+                setForgotMessage("");
+              }}
+            >
+              Forgot Password?
+            </button>
           </div>
 
           <button className="primary-button" type="submit" disabled={submitting}>
@@ -96,6 +123,33 @@ const Login = () => {
           </p>
         </form>
       </section>
+
+      {forgotOpen && (
+        <div className="modal-backdrop" role="presentation" onClick={() => setForgotOpen(false)}>
+          <section className="modal" role="dialog" aria-modal="true" onClick={(event) => event.stopPropagation()}>
+            <header>
+              <h2>Forgot Password</h2>
+              <button type="button" onClick={() => setForgotOpen(false)} title="Close">x</button>
+            </header>
+            <form className="support-card" onSubmit={submitForgotPassword}>
+              <label>
+                Email
+                <input
+                  type="email"
+                  value={forgotEmail}
+                  onChange={(event) => setForgotEmail(event.target.value)}
+                  placeholder="Enter your account email"
+                  required
+                />
+              </label>
+              {forgotMessage && <div className="alert">{forgotMessage}</div>}
+              <button className="primary-button compact" type="submit" disabled={submitting}>
+                {submitting ? "Checking..." : "Submit"}
+              </button>
+            </form>
+          </section>
+        </div>
+      )}
     </main>
   );
 };

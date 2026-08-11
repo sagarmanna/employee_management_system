@@ -999,6 +999,18 @@ td:first-child {
   width: 150px;
 }
 
+.support-card label {
+  margin: 0;
+}
+
+.support-card input {
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  color: var(--text);
+  height: 52px;
+  padding: 0 14px;
+}
+
 .report-grid {
   display: grid;
   gap: 14px;
@@ -1314,6 +1326,7 @@ td:first-child {
 :root[data-theme="dark"] .field,
 :root[data-theme="dark"] .search-box,
 :root[data-theme="dark"] .profile-form input,
+:root[data-theme="dark"] .support-card input,
 :root[data-theme="dark"] .employee-form input,
 :root[data-theme="dark"] .employee-form select,
 :root[data-theme="dark"] .filter-button,

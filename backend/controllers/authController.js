@@ -71,6 +71,27 @@ exports.login = async (req, res) => {
   }
 };
 
+exports.forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
+      return res.status(404).json({ message: "No account found with this email" });
+    }
+
+    return res.json({
+      message: "Account found. Please contact your administrator to reset this password.",
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "Unable to process password reset request" });
+  }
+};
+
 exports.me = async (req, res) => {
   const user = await User.findByPk(req.user.id);
   if (!user) {
