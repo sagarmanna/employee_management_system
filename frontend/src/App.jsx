@@ -5,9 +5,12 @@ import { useAuth } from "./context/auth";
 import { ThemeProvider } from "./context/ThemeContext";
 import AddEmployee from "./pages/AddEmployee";
 import Dashboard from "./pages/Dashboard";
+import Departments from "./pages/Departments";
 import EditEmployee from "./pages/EditEmployee";
 import Login from "./pages/Login";
+import Profile from "./pages/Profile";
 import Register from "./pages/Register";
+import Settings from "./pages/Settings";
 import { routes } from "./routes";
 
 const usePath = () => {
@@ -48,6 +51,27 @@ const AppRoutes = () => {
     return (
       <ProtectedRoute>
         <AddEmployee />
+      </ProtectedRoute>
+    );
+  }
+  if (path === routes.departments) {
+    return (
+      <ProtectedRoute>
+        <Departments />
+      </ProtectedRoute>
+    );
+  }
+  if (path === routes.profile) {
+    return (
+      <ProtectedRoute>
+        <Profile />
+      </ProtectedRoute>
+    );
+  }
+  if (path === routes.settings) {
+    return (
+      <ProtectedRoute>
+        <Settings />
       </ProtectedRoute>
     );
   }

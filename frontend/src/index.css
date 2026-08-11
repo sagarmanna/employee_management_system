@@ -945,6 +945,89 @@ td:first-child {
   padding: 30px;
 }
 
+.detail-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  margin: 28px;
+  padding: 30px;
+}
+
+.profile-hero {
+  align-items: center;
+  display: flex;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+.profile-hero h2,
+.detail-card h2,
+.department-grid h2 {
+  margin: 0;
+}
+
+.profile-hero p,
+.settings-row p,
+.department-grid p {
+  color: var(--muted);
+  margin: 6px 0 0;
+}
+
+.avatar.large {
+  background: #dbeafe;
+  font-size: 34px;
+  height: 86px;
+  margin: 0;
+  width: 86px;
+}
+
+.detail-grid,
+.department-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(3, minmax(180px, 1fr));
+}
+
+.detail-grid article,
+.department-grid article,
+.settings-row {
+  background: #f8fbff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.detail-grid span {
+  color: var(--muted);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.settings-row {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.theme-toggle.inline {
+  color: var(--text);
+  margin: 0;
+  max-width: 220px;
+}
+
+.department-grid article {
+  align-items: center;
+  display: flex;
+  gap: 18px;
+}
+
+.department-grid strong {
+  display: block;
+  margin-top: 10px;
+}
+
 .form-card h2 {
   font-size: 21px;
   margin: 0 0 28px;
@@ -1053,6 +1136,7 @@ td:first-child {
 
 :root[data-theme="dark"] .panel,
 :root[data-theme="dark"] .form-card,
+:root[data-theme="dark"] .detail-card,
 :root[data-theme="dark"] .stat-card {
   background: linear-gradient(145deg, rgba(16, 29, 51, 0.92), rgba(8, 15, 29, 0.92));
   border-color: var(--line);
@@ -1120,6 +1204,13 @@ td:first-child {
 }
 
 :root[data-theme="dark"] .modal-list article {
+  background: rgba(9, 19, 36, 0.82);
+  border-color: #243a61;
+}
+
+:root[data-theme="dark"] .detail-grid article,
+:root[data-theme="dark"] .department-grid article,
+:root[data-theme="dark"] .settings-row {
   background: rgba(9, 19, 36, 0.82);
   border-color: #243a61;
 }
@@ -1236,6 +1327,8 @@ td:first-child {
   }
 
   .stats-grid,
+  .detail-grid,
+  .department-grid,
   .employee-form {
     grid-template-columns: 1fr;
   }
@@ -1252,6 +1345,7 @@ td:first-child {
 
   .stats-grid,
   .panel,
+  .detail-card,
   .form-card {
     margin-left: 14px;
     margin-right: 14px;

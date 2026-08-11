@@ -9,9 +9,9 @@ const navItems = [
   { label: "Dashboard", path: routes.dashboard, icon: "dashboard" },
   { label: "Employees", path: routes.dashboard, icon: "users" },
   { label: "Add Employee", path: routes.addEmployee, icon: "add" },
-  { label: "Departments", path: routes.dashboard, icon: "building" },
-  { label: "Profile", path: routes.dashboard, icon: "user" },
-  { label: "Settings", path: routes.dashboard, icon: "settings" },
+  { label: "Departments", path: routes.departments, icon: "building" },
+  { label: "Profile", path: routes.profile, icon: "user" },
+  { label: "Settings", path: routes.settings, icon: "settings" },
 ];
 
 const Navbar = ({ active = "Dashboard" }) => {

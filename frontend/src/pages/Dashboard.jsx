@@ -166,11 +166,11 @@ const Dashboard = () => {
                       <small>{user?.email || "Administrator"}</small>
                     </p>
                   </div>
-                  <button type="button" role="menuitem">
+                  <button type="button" role="menuitem" onClick={() => navigateTo(routes.profile)}>
                     <Icon name="user" size={17} />
                     Profile
                   </button>
-                  <button type="button" role="menuitem">
+                  <button type="button" role="menuitem" onClick={() => navigateTo(routes.settings)}>
                     <Icon name="settings" size={17} />
                     Settings
                   </button>

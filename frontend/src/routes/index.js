@@ -3,6 +3,9 @@ export const routes = {
   register: "/register",
   dashboard: "/dashboard",
   addEmployee: "/employees/add",
+  departments: "/departments",
+  profile: "/profile",
+  settings: "/settings",
   editEmployee: (id = ":id") => `/employees/${id}/edit`,
 };
 
