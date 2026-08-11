@@ -28,6 +28,8 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [actionModal, setActionModal] = useState(null);
+  const [actionMessage, setActionMessage] = useState("");
 
   const loadData = async (term = search) => {
     setLoading(true);
@@ -77,6 +79,44 @@ const Dashboard = () => {
     loadData();
   };
 
+  const csvValue = (value) => `"${String(value ?? "").replaceAll('"', '""')}"`;
+
+  const exportEmployees = async () => {
+    setActionMessage("");
+    try {
+      const { employees: allEmployees } = await api.getEmployees();
+      if (!allEmployees.length) {
+        setActionMessage("No employee records available to export.");
+        return;
+      }
+
+      const rows = [
+        ["Name", "Email", "Department", "Salary", "Status", "Created At"],
+        ...allEmployees.map((employee) => [
+          employee.name,
+          employee.email,
+          employee.department,
+          employee.salary,
+          employee.status,
+          employee.createdAt,
+        ]),
+      ];
+      const csv = rows.map((row) => row.map(csvValue).join(",")).join("\n");
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `employees-${new Date().toISOString().slice(0, 10)}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+      setActionMessage(`Exported ${allEmployees.length} employee records.`);
+    } catch (err) {
+      setActionMessage(err.message);
+    }
+  };
+
   const cards = [
     { label: "Total Employees", value: stats.totalEmployees, note: "Live employee records", tone: "blue", icon: "users" },
     { label: "Departments", value: stats.departments, note: "Total Departments", tone: "green", icon: "user" },
@@ -85,6 +125,14 @@ const Dashboard = () => {
   ];
 
   const recentEmployees = employees.slice(0, 3);
+  const departmentRows = useMemo(() => {
+    const counts = employees.reduce((result, employee) => {
+      result[employee.department] = (result[employee.department] || 0) + 1;
+      return result;
+    }, {});
+
+    return Object.entries(counts).map(([department, count]) => ({ department, count }));
+  }, [employees]);
 
   return (
     <main className="app-shell">
@@ -194,25 +242,26 @@ const Dashboard = () => {
                 <span className="stat-icon green"><Icon name="users" /></span>
                 Add Employee
               </button>
-              <button type="button">
+              <button type="button" onClick={exportEmployees}>
                 <span className="stat-icon violet"><Icon name="file" /></span>
                 Export Data
               </button>
-              <button type="button">
+              <button type="button" onClick={() => setActionModal("departments")}>
                 <span className="stat-icon blue"><Icon name="building" /></span>
                 Departments
               </button>
-              <button type="button">
+              <button type="button" onClick={() => setActionModal("reports")}>
                 <span className="stat-icon gold"><Icon name="dashboard" /></span>
                 View Reports
               </button>
             </div>
+            {actionMessage && <p className="action-message">{actionMessage}</p>}
           </article>
 
           <article className="panel recent-activity">
             <header>
               <h2>Recent Activity</h2>
-              <button type="button">View All</button>
+              <button type="button" onClick={() => setActionModal("activity")}>View All</button>
             </header>
             {recentEmployees.length ? (
               <div className="activity-list">
@@ -232,6 +281,80 @@ const Dashboard = () => {
           </article>
         </section>
       </section>
+
+      {actionModal && (
+        <div className="modal-backdrop" role="presentation" onClick={() => setActionModal(null)}>
+          <section className="modal" role="dialog" aria-modal="true" onClick={(event) => event.stopPropagation()}>
+            <header>
+              <h2>
+                {actionModal === "departments" && "Departments"}
+                {actionModal === "reports" && "Reports"}
+                {actionModal === "activity" && "Activity Logs"}
+              </h2>
+              <button type="button" onClick={() => setActionModal(null)} title="Close">x</button>
+            </header>
+
+            {actionModal === "departments" && (
+              departmentRows.length ? (
+                <div className="modal-list">
+                  {departmentRows.map((row) => (
+                    <article key={row.department}>
+                      <span className="stat-icon blue"><Icon name="building" size={18} /></span>
+                      <p>
+                        <strong>{row.department}</strong>
+                        <small>{row.count} employee{row.count === 1 ? "" : "s"}</small>
+                      </p>
+                    </article>
+                  ))}
+                </div>
+              ) : (
+                <div className="empty-state compact">No departments found.</div>
+              )
+            )}
+
+            {actionModal === "reports" && (
+              <div className="report-grid">
+                <article>
+                  <span>Total Employees</span>
+                  <strong>{stats.totalEmployees}</strong>
+                </article>
+                <article>
+                  <span>Active Employees</span>
+                  <strong>{stats.activeEmployees}</strong>
+                </article>
+                <article>
+                  <span>Departments</span>
+                  <strong>{stats.departments}</strong>
+                </article>
+                <article>
+                  <span>Total Salary</span>
+                  <strong>{money.format(stats.totalSalary)}</strong>
+                </article>
+              </div>
+            )}
+
+            {actionModal === "activity" && (
+              employees.length ? (
+                <div className="modal-list">
+                  {employees.slice(0, 8).map((employee) => (
+                    <article key={employee.id}>
+                      <span className="avatar small">{employee.name?.charAt(0)?.toUpperCase() || "E"}</span>
+                      <p>
+                        <strong>{employee.name}</strong>
+                        <small>
+                          {employee.department} record updated {new Date(employee.updatedAt || employee.createdAt).toLocaleString()}
+                        </small>
+                      </p>
+                    </article>
+                  ))}
+                </div>
+              ) : (
+                <div className="empty-state compact">No activity found.</div>
+              )
+            )}
+          </section>
+        </div>
+      )}
     </main>
   );
 };

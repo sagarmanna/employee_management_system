@@ -747,6 +747,18 @@ td:first-child {
   padding: 16px;
 }
 
+.quick-actions button:hover {
+  border-color: var(--blue);
+  box-shadow: 0 12px 26px rgba(18, 103, 232, 0.12);
+  transform: translateY(-1px);
+}
+
+.action-message {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 18px 0 0;
+}
+
 .quick-actions .stat-icon,
 .activity-item .stat-icon {
   height: 54px;
@@ -889,6 +901,31 @@ td:first-child {
   justify-content: center;
   text-decoration: none;
   width: 150px;
+}
+
+.report-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(2, minmax(160px, 1fr));
+  padding: 24px;
+}
+
+.report-grid article {
+  background: #f8fbff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 18px;
+}
+
+.report-grid span {
+  color: var(--muted);
+  display: block;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.report-grid strong {
+  font-size: 24px;
 }
 
 .page-header > div {
@@ -1083,6 +1120,11 @@ td:first-child {
 }
 
 :root[data-theme="dark"] .modal-list article {
+  background: rgba(9, 19, 36, 0.82);
+  border-color: #243a61;
+}
+
+:root[data-theme="dark"] .report-grid article {
   background: rgba(9, 19, 36, 0.82);
   border-color: #243a61;
 }
