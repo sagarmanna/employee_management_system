@@ -301,6 +301,11 @@ label span {
   width: 100%;
 }
 
+.nav-item:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
 .nav-item.active,
 .nav-item:hover {
   background: var(--blue);
@@ -331,6 +336,14 @@ label span {
 
 .nav-item.subtle {
   color: #eef5ff;
+}
+
+.nav-message {
+  color: #c7d5ef;
+  display: block;
+  font-size: 12px;
+  line-height: 1.4;
+  padding: 4px 18px;
 }
 
 .theme-toggle {
@@ -784,6 +797,100 @@ td:first-child {
   padding: 10px;
 }
 
+.modal-backdrop {
+  align-items: center;
+  background: rgba(2, 8, 23, 0.62);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  padding: 24px;
+  position: fixed;
+  z-index: 50;
+}
+
+.modal {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+  max-width: 560px;
+  overflow: hidden;
+  width: min(100%, 560px);
+}
+
+.modal header {
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 24px;
+}
+
+.modal h2 {
+  font-size: 20px;
+  margin: 0;
+}
+
+.modal header button {
+  background: transparent;
+  border: 0;
+  color: var(--muted);
+  font-size: 22px;
+  height: 32px;
+  width: 32px;
+}
+
+.modal-list {
+  display: grid;
+  gap: 12px;
+  max-height: 430px;
+  overflow: auto;
+  padding: 20px 24px 24px;
+}
+
+.modal-list article {
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: flex;
+  gap: 12px;
+  padding: 14px;
+}
+
+.modal-list p,
+.support-card p {
+  margin: 0;
+}
+
+.modal-list strong,
+.modal-list small {
+  display: block;
+}
+
+.modal-list small {
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.support-card {
+  display: grid;
+  gap: 18px;
+  padding: 24px;
+}
+
+.support-card a {
+  align-items: center;
+  background: var(--blue);
+  border-radius: 6px;
+  color: #fff;
+  display: inline-flex;
+  font-weight: 700;
+  height: 46px;
+  justify-content: center;
+  text-decoration: none;
+  width: 150px;
+}
+
 .page-header > div {
   align-items: center;
   display: flex;
@@ -968,6 +1075,16 @@ td:first-child {
 
 :root[data-theme="dark"] .user-dropdown button:hover {
   background: rgba(47, 128, 255, 0.14);
+}
+
+:root[data-theme="dark"] .modal {
+  background: #0b1528;
+  border-color: #243a61;
+}
+
+:root[data-theme="dark"] .modal-list article {
+  background: rgba(9, 19, 36, 0.82);
+  border-color: #243a61;
 }
 
 :root[data-theme="dark"] input,
