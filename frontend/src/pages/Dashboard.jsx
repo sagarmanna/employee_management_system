@@ -79,7 +79,8 @@ const Dashboard = () => {
     loadData();
   };
 
-  const csvValue = (value) => `"${String(value ?? "").replaceAll('"', '""')}"`;
+  const tableValue = (value) =>
+    String(value ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 
   const exportEmployees = async () => {
     setActionMessage("");
@@ -90,23 +91,29 @@ const Dashboard = () => {
         return;
       }
 
-      const rows = [
-        ["Name", "Email", "Department", "Salary", "Status", "Created At"],
-        ...allEmployees.map((employee) => [
-          employee.name,
-          employee.email,
-          employee.department,
-          employee.salary,
-          employee.status,
-          employee.createdAt,
-        ]),
-      ];
-      const csv = rows.map((row) => row.map(csvValue).join(",")).join("\n");
-      const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+      const body = allEmployees
+        .map((employee) => `
+          <tr>
+            <td>${tableValue(employee.name)}</td>
+            <td>${tableValue(employee.email)}</td>
+            <td>${tableValue(employee.department)}</td>
+            <td>${tableValue(employee.salary)}</td>
+            <td>${tableValue(employee.status)}</td>
+            <td>${tableValue(employee.createdAt)}</td>
+          </tr>
+        `)
+        .join("");
+      const excel = `
+        <table>
+          <thead><tr><th>Name</th><th>Email</th><th>Department</th><th>Salary</th><th>Status</th><th>Created At</th></tr></thead>
+          <tbody>${body}</tbody>
+        </table>
+      `;
+      const blob = new Blob([excel], { type: "application/vnd.ms-excel;charset=utf-8" });
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = `employees-${new Date().toISOString().slice(0, 10)}.csv`;
+      link.download = `employees-${new Date().toISOString().slice(0, 10)}.xls`;
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -123,6 +130,7 @@ const Dashboard = () => {
     { label: "Total Salary", value: money.format(stats.totalSalary), note: "Current payroll total", tone: "gold", icon: "user" },
     { label: "Active Employees", value: stats.activeEmployees, note: `${activePercent} of total`, tone: "violet", icon: "users" },
   ];
+  const canManageEmployees = user?.role === "admin";
 
   const recentEmployees = employees.slice(0, 3);
   const departmentRows = useMemo(() => {
@@ -152,7 +160,11 @@ const Dashboard = () => {
                 aria-expanded={userMenuOpen}
                 aria-haspopup="menu"
               >
-                <span className="avatar small">{user?.name?.charAt(0)?.toUpperCase() || "A"}</span>
+                {user?.profileImage ? (
+                  <img className="avatar-image small" src={user.profileImage} alt={user?.name || "Profile"} />
+                ) : (
+                  <span className="avatar small">{user?.name?.charAt(0)?.toUpperCase() || "A"}</span>
+                )}
                 <span><strong>{user?.name || "Admin User"}</strong><small>Administrator</small></span>
                 <Icon name="chevron" size={14} />
               </button>
@@ -160,7 +172,11 @@ const Dashboard = () => {
               {userMenuOpen && (
                 <div className="user-dropdown" role="menu">
                   <div className="dropdown-head">
-                    <span className="avatar small">{user?.name?.charAt(0)?.toUpperCase() || "A"}</span>
+                    {user?.profileImage ? (
+                      <img className="avatar-image small" src={user.profileImage} alt={user?.name || "Profile"} />
+                    ) : (
+                      <span className="avatar small">{user?.name?.charAt(0)?.toUpperCase() || "A"}</span>
+                    )}
                     <p>
                       <strong>{user?.name || "Admin User"}</strong>
                       <small>{user?.email || "Administrator"}</small>
@@ -215,7 +231,13 @@ const Dashboard = () => {
             <button className="filter-button" type="button" title="Filter employees">
               <Icon name="filter" size={18} />
             </button>
-            <button className="primary-button compact" type="button" onClick={() => navigateTo(routes.addEmployee)}>
+            <button
+              className="primary-button compact"
+              type="button"
+              onClick={() => navigateTo(routes.addEmployee)}
+              disabled={!canManageEmployees}
+              title={canManageEmployees ? "Add employee" : "Only admins can add employees"}
+            >
               <Icon name="plus" size={18} />
               Add Employee
             </button>
@@ -226,7 +248,7 @@ const Dashboard = () => {
             <Loader />
           ) : employees.length ? (
             <>
-              <EmployeeTable employees={employees} onDelete={deleteEmployee} />
+              <EmployeeTable employees={employees} onDelete={deleteEmployee} canManage={canManageEmployees} />
               <div className="table-footer">Showing {employees.length} employee records</div>
             </>
           ) : (
@@ -238,7 +260,12 @@ const Dashboard = () => {
           <article className="panel quick-actions">
             <h2>Quick Actions</h2>
             <div>
-              <button type="button" onClick={() => navigateTo(routes.addEmployee)}>
+              <button
+                type="button"
+                onClick={() => navigateTo(routes.addEmployee)}
+                disabled={!canManageEmployees}
+                title={canManageEmployees ? "Add employee" : "Only admins can add employees"}
+              >
                 <span className="stat-icon green"><Icon name="users" /></span>
                 Add Employee
               </button>

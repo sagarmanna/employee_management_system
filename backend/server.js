@@ -29,7 +29,7 @@ app.use((err, req, res, next) => {
 
 sequelize
   .authenticate()
-  .then(() => sequelize.sync())
+  .then(() => sequelize.sync({ alter: true }))
   .then(() => {
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);

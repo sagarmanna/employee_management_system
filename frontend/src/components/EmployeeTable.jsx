@@ -9,7 +9,7 @@ const money = new Intl.NumberFormat("en-IN", {
 
 const avatarColors = ["#dbebff", "#dcfce7", "#fee2e2", "#fef3c7", "#ede9fe"];
 
-const EmployeeTable = ({ employees, onDelete }) => (
+const EmployeeTable = ({ employees, onDelete, canManage = true }) => (
   <div className="table-shell">
     <table>
       <thead>
@@ -42,7 +42,8 @@ const EmployeeTable = ({ employees, onDelete }) => (
                   className="icon-button edit"
                   type="button"
                   onClick={() => navigateTo(routes.editEmployee(employee.id))}
-                  title="Edit employee"
+                  title={canManage ? "Edit employee" : "Only admins can edit employees"}
+                  disabled={!canManage}
                 >
                   <Icon name="edit" size={16} />
                 </button>
@@ -50,7 +51,8 @@ const EmployeeTable = ({ employees, onDelete }) => (
                   className="icon-button delete"
                   type="button"
                   onClick={() => onDelete(employee.id)}
-                  title="Delete employee"
+                  title={canManage ? "Delete employee" : "Only admins can delete employees"}
+                  disabled={!canManage}
                 >
                   <Icon name="trash" size={16} />
                 </button>

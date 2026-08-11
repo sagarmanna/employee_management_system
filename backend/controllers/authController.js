@@ -6,6 +6,8 @@ const publicUser = (user) => ({
   id: user.id,
   name: user.name,
   email: user.email,
+  role: user.role,
+  profileImage: user.profileImage,
 });
 
 const createToken = (user) =>
@@ -24,8 +26,14 @@ exports.register = async (req, res) => {
       return res.status(409).json({ message: "An account with this email already exists" });
     }
 
+    const userCount = await User.count();
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await User.create({ name, email, password: hashedPassword });
+    const user = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+      role: userCount === 0 ? "admin" : "user",
+    });
 
     return res.status(201).json({
       token: createToken(user),
@@ -70,4 +78,26 @@ exports.me = async (req, res) => {
   }
 
   return res.json({ user: publicUser(user) });
+};
+
+exports.updateProfile = async (req, res) => {
+  try {
+    const user = await User.findByPk(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const { name, profileImage } = req.body;
+    if (name !== undefined) {
+      user.name = name;
+    }
+    if (profileImage !== undefined) {
+      user.profileImage = profileImage || null;
+    }
+
+    await user.save();
+    return res.json({ user: publicUser(user) });
+  } catch (error) {
+    return res.status(500).json({ message: "Unable to update profile" });
+  }
 };

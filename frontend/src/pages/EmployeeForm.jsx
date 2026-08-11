@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Icon } from "../components/Icons";
 import Loader from "../components/Loader";
 import Navbar from "../components/Navbar";
+import { useAuth } from "../context/auth";
 import { navigateTo, routes } from "../routes";
 import { api } from "../services/api";
 
@@ -9,6 +10,8 @@ const departments = ["IT", "HR", "Finance", "Marketing", "Operations", "Sales"];
 
 const EmployeeForm = ({ mode, id }) => {
   const isEdit = mode === "edit";
+  const { user } = useAuth();
+  const canManageEmployees = user?.role === "admin";
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -74,7 +77,9 @@ const EmployeeForm = ({ mode, id }) => {
 
         <section className="form-card">
           <h2>Employee Information</h2>
-          {loading ? (
+          {!canManageEmployees ? (
+            <div className="empty-state compact">Only administrators can add or edit employee records.</div>
+          ) : loading ? (
             <Loader />
           ) : (
             <form className="employee-form" onSubmit={submit}>

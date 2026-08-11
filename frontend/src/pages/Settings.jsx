@@ -1,9 +1,11 @@
 import Navbar from "../components/Navbar";
 import { Icon } from "../components/Icons";
 import { useTheme } from "../context/theme";
+import { useAuth } from "../context/auth";
 
 const Settings = () => {
   const { isDark, toggleTheme } = useTheme();
+  const { user } = useAuth();
 
   return (
     <main className="app-shell">
@@ -18,6 +20,13 @@ const Settings = () => {
 
         <section className="detail-card">
           <h2>Preferences</h2>
+          <div className="settings-row">
+            <div>
+              <strong>Role-Based Access</strong>
+              <p>Your current role is {user?.role === "admin" ? "Administrator" : "User"}.</p>
+            </div>
+            <span className="role-pill">{user?.role || "user"}</span>
+          </div>
           <div className="settings-row">
             <div>
               <strong>Dark Mode</strong>

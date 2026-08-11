@@ -47,6 +47,13 @@ export const AuthProvider = ({ children }) => {
     saveSession(session);
   };
 
+  const updateProfile = async (payload) => {
+    const { user: nextUser } = await api.updateProfile(payload);
+    setUser(nextUser);
+    localStorage.setItem("ems_user", JSON.stringify(nextUser));
+    return nextUser;
+  };
+
   const logout = () => {
     setAuthToken("");
     localStorage.removeItem("ems_user");
@@ -56,7 +63,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const value = useMemo(
-    () => ({ user, loading, isAuthenticated: Boolean(user), login, register, logout }),
+    () => ({ user, loading, isAuthenticated: Boolean(user), login, register, updateProfile, logout }),
     [user, loading],
   );
 

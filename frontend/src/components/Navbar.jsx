@@ -22,7 +22,8 @@ const Navbar = ({ active = "Dashboard" }) => {
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
 
-  const csvValue = (value) => `"${String(value ?? "").replaceAll('"', '""')}"`;
+  const tableValue = (value) =>
+    String(value ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 
   const fetchEmployees = async () => {
     const { employees } = await api.getEmployees();
@@ -39,23 +40,29 @@ const Navbar = ({ active = "Dashboard" }) => {
         return;
       }
 
-      const rows = [
-        ["Name", "Email", "Department", "Salary", "Status", "Created At"],
-        ...employees.map((employee) => [
-          employee.name,
-          employee.email,
-          employee.department,
-          employee.salary,
-          employee.status,
-          employee.createdAt,
-        ]),
-      ];
-      const csv = rows.map((row) => row.map(csvValue).join(",")).join("\n");
-      const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+      const body = employees
+        .map((employee) => `
+          <tr>
+            <td>${tableValue(employee.name)}</td>
+            <td>${tableValue(employee.email)}</td>
+            <td>${tableValue(employee.department)}</td>
+            <td>${tableValue(employee.salary)}</td>
+            <td>${tableValue(employee.status)}</td>
+            <td>${tableValue(employee.createdAt)}</td>
+          </tr>
+        `)
+        .join("");
+      const excel = `
+        <table>
+          <thead><tr><th>Name</th><th>Email</th><th>Department</th><th>Salary</th><th>Status</th><th>Created At</th></tr></thead>
+          <tbody>${body}</tbody>
+        </table>
+      `;
+      const blob = new Blob([excel], { type: "application/vnd.ms-excel;charset=utf-8" });
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = `employees-${new Date().toISOString().slice(0, 10)}.csv`;
+      link.download = `employees-${new Date().toISOString().slice(0, 10)}.xls`;
       document.body.appendChild(link);
       link.click();
       link.remove();

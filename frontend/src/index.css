@@ -213,6 +213,13 @@ label span {
   padding: 0 26px;
 }
 
+.primary-button:disabled,
+.quick-actions button:disabled,
+.icon-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
 .primary-button {
   align-items: center;
   background: linear-gradient(180deg, #1777f2, #085bd6);
@@ -560,6 +567,13 @@ label span {
   background: #dbeafe;
   height: 32px;
   margin-right: 0;
+  width: 32px;
+}
+
+.avatar-image.small {
+  border-radius: 50%;
+  height: 32px;
+  object-fit: cover;
   width: 32px;
 }
 
@@ -982,6 +996,33 @@ td:first-child {
   width: 86px;
 }
 
+.profile-image {
+  border-radius: 50%;
+  height: 86px;
+  object-fit: cover;
+  width: 86px;
+}
+
+.profile-form {
+  align-items: end;
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(2, minmax(220px, 1fr)) auto;
+  margin-bottom: 28px;
+}
+
+.profile-form label {
+  margin: 0;
+}
+
+.profile-form input {
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  color: var(--text);
+  height: 52px;
+  padding: 0 14px;
+}
+
 .detail-grid,
 .department-grid {
   display: grid;
@@ -1015,6 +1056,15 @@ td:first-child {
   color: var(--text);
   margin: 0;
   max-width: 220px;
+}
+
+.role-pill {
+  background: #eaf2ff;
+  border-radius: 999px;
+  color: var(--blue);
+  font-weight: 800;
+  padding: 8px 14px;
+  text-transform: capitalize;
 }
 
 .department-grid article {
@@ -1177,6 +1227,7 @@ td:first-child {
 
 :root[data-theme="dark"] .field,
 :root[data-theme="dark"] .search-box,
+:root[data-theme="dark"] .profile-form input,
 :root[data-theme="dark"] .employee-form input,
 :root[data-theme="dark"] .employee-form select,
 :root[data-theme="dark"] .filter-button,
@@ -1218,6 +1269,10 @@ td:first-child {
 :root[data-theme="dark"] .report-grid article {
   background: rgba(9, 19, 36, 0.82);
   border-color: #243a61;
+}
+
+:root[data-theme="dark"] .role-pill {
+  background: rgba(47, 128, 255, 0.16);
 }
 
 :root[data-theme="dark"] input,
@@ -1329,6 +1384,7 @@ td:first-child {
   .stats-grid,
   .detail-grid,
   .department-grid,
+  .profile-form,
   .employee-form {
     grid-template-columns: 1fr;
   }

@@ -46,6 +46,11 @@ export const api = {
       body: JSON.stringify(payload),
     }),
   me: () => request("/auth/me"),
+  updateProfile: (payload) =>
+    request("/auth/profile", {
+      method: "PUT",
+      body: JSON.stringify(payload),
+    }),
   getEmployees: (search = "") =>
     request(`/employees${search ? `?search=${encodeURIComponent(search)}` : ""}`),
   getEmployee: (id) => request(`/employees/${id}`),

@@ -40,6 +40,7 @@ const Employee = sequelize.define(
   },
   {
     tableName: "employees",
+    paranoid: true,
   },
 );
 
