@@ -313,8 +313,11 @@ label span {
   opacity: 0.7;
 }
 
-.nav-item.active,
 .nav-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.nav-item.active {
   background: var(--blue);
 }
 
@@ -631,6 +634,10 @@ label span {
   border-radius: 8px;
   box-shadow: var(--shadow);
   margin: 0 28px 28px;
+}
+
+.employees-panel {
+  margin-top: 28px;
 }
 
 .toolbar {
@@ -1167,8 +1174,12 @@ td:first-child {
   background: linear-gradient(135deg, #2231a2, #6d3df5);
 }
 
-:root[data-theme="dark"] .nav-item.active,
 :root[data-theme="dark"] .nav-item:hover,
+:root[data-theme="dark"] .primary-button {
+  background: rgba(47, 128, 255, 0.12);
+}
+
+:root[data-theme="dark"] .nav-item.active,
 :root[data-theme="dark"] .primary-button {
   background: linear-gradient(135deg, #1f4fff, #681dff);
   box-shadow: 0 14px 28px rgba(87, 54, 255, 0.28);

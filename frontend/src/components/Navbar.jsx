@@ -7,7 +7,7 @@ import { api } from "../services/api";
 
 const navItems = [
   { label: "Dashboard", path: routes.dashboard, icon: "dashboard" },
-  { label: "Employees", path: routes.dashboard, icon: "users" },
+  { label: "Employees", path: routes.employees, icon: "users" },
   { label: "Add Employee", path: routes.addEmployee, icon: "add" },
   { label: "Departments", path: routes.departments, icon: "building" },
   { label: "Profile", path: routes.profile, icon: "user" },
@@ -21,6 +21,7 @@ const Navbar = ({ active = "Dashboard" }) => {
   const [modalEmployees, setModalEmployees] = useState([]);
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
+  const currentPath = window.location.pathname;
 
   const tableValue = (value) =>
     String(value ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
@@ -108,7 +109,7 @@ const Navbar = ({ active = "Dashboard" }) => {
         <nav className="nav-menu" aria-label="Main navigation">
           {navItems.map((item) => (
             <button
-              className={`nav-item ${active === item.label ? "active" : ""}`}
+              className={`nav-item ${currentPath === item.path || active === item.label ? "active" : ""}`}
               key={item.label}
               type="button"
               onClick={() => navigateTo(item.path)}

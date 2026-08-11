@@ -7,6 +7,7 @@ import AddEmployee from "./pages/AddEmployee";
 import Dashboard from "./pages/Dashboard";
 import Departments from "./pages/Departments";
 import EditEmployee from "./pages/EditEmployee";
+import Employees from "./pages/Employees";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import Register from "./pages/Register";
@@ -51,6 +52,13 @@ const AppRoutes = () => {
     return (
       <ProtectedRoute>
         <AddEmployee />
+      </ProtectedRoute>
+    );
+  }
+  if (path === routes.employees) {
+    return (
+      <ProtectedRoute>
+        <Employees />
       </ProtectedRoute>
     );
   }

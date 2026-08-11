@@ -2,6 +2,7 @@ export const routes = {
   login: "/login",
   register: "/register",
   dashboard: "/dashboard",
+  employees: "/employees",
   addEmployee: "/employees/add",
   departments: "/departments",
   profile: "/profile",
