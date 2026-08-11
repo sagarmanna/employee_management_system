@@ -93,12 +93,12 @@ exports.forgotPassword = async (req, res) => {
     }
 
     const user = await User.findOne({ where: { email } });
-    if (!user) {
-      return res.status(404).json({ message: "No account found with this email" });
+    if (user) {
+      console.log(`Password reset requested for ${user.email}`);
     }
 
     return res.json({
-      message: "Account found. Please contact your administrator to reset this password.",
+      message: "If this email exists, a password reset request has been sent to the administrator.",
     });
   } catch (error) {
     return res.status(500).json({ message: "Unable to process password reset request" });

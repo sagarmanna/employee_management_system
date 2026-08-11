@@ -14,7 +14,9 @@ const Login = () => {
   const [forgotOpen, setForgotOpen] = useState(false);
   const [forgotEmail, setForgotEmail] = useState("");
   const [forgotMessage, setForgotMessage] = useState("");
+  const [forgotStatus, setForgotStatus] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [forgotSubmitting, setForgotSubmitting] = useState(false);
 
   const submit = async (event) => {
     event.preventDefault();
@@ -33,14 +35,18 @@ const Login = () => {
   const submitForgotPassword = async (event) => {
     event.preventDefault();
     setForgotMessage("");
-    setSubmitting(true);
+    setForgotStatus("");
+    setForgotSubmitting(true);
     try {
       const { message } = await api.forgotPassword({ email: forgotEmail });
+      setForgotStatus("success");
       setForgotMessage(message);
+      setForm((current) => ({ ...current, email: forgotEmail }));
     } catch (err) {
+      setForgotStatus("error");
       setForgotMessage(err.message);
     } finally {
-      setSubmitting(false);
+      setForgotSubmitting(false);
     }
   };
 
@@ -122,6 +128,7 @@ const Login = () => {
                 setForgotEmail(form.email);
                 setForgotOpen(true);
                 setForgotMessage("");
+                setForgotStatus("");
               }}
             >
               Forgot Password?
@@ -143,10 +150,11 @@ const Login = () => {
         <div className="modal-backdrop" role="presentation" onClick={() => setForgotOpen(false)}>
           <section className="modal" role="dialog" aria-modal="true" onClick={(event) => event.stopPropagation()}>
             <header>
-              <h2>Forgot Password</h2>
+              <h2>Reset Password</h2>
               <button type="button" onClick={() => setForgotOpen(false)} title="Close">x</button>
             </header>
             <form className="support-card" onSubmit={submitForgotPassword}>
+              <p>Enter your account email to send a reset request to the administrator.</p>
               <label>
                 Email
                 <input
@@ -157,9 +165,13 @@ const Login = () => {
                   required
                 />
               </label>
-              {forgotMessage && <div className="alert">{forgotMessage}</div>}
-              <button className="primary-button compact" type="submit" disabled={submitting}>
-                {submitting ? "Checking..." : "Submit"}
+              {forgotMessage && (
+                <div className={`alert ${forgotStatus === "success" ? "success" : ""}`}>
+                  {forgotMessage}
+                </div>
+              )}
+              <button className="primary-button compact" type="submit" disabled={forgotSubmitting}>
+                {forgotSubmitting ? "Sending..." : "Send Request"}
               </button>
             </form>
           </section>
