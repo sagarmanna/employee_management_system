@@ -135,6 +135,7 @@ const Dashboard = () => {
     { label: "Active Employees", value: stats.activeEmployees, note: `${activePercent} of total`, tone: "violet", icon: "users" },
   ];
   const canManageEmployees = user?.role === "admin";
+  const roleLabel = user?.role === "admin" ? "Administrator" : "User";
 
   const recentEmployees = employees.slice(0, 3);
   const notificationItems = employees.slice(0, 5);
@@ -207,7 +208,7 @@ const Dashboard = () => {
                 ) : (
                   <span className="avatar small">{user?.name?.charAt(0)?.toUpperCase() || "A"}</span>
                 )}
-                <span><strong>{user?.name || "Admin User"}</strong><small>Administrator</small></span>
+                <span><strong>{user?.name || "User"}</strong><small>{roleLabel}</small></span>
                 <Icon name="chevron" size={14} />
               </button>
 
@@ -220,8 +221,8 @@ const Dashboard = () => {
                       <span className="avatar small">{user?.name?.charAt(0)?.toUpperCase() || "A"}</span>
                     )}
                     <p>
-                      <strong>{user?.name || "Admin User"}</strong>
-                      <small>{user?.email || "Administrator"}</small>
+                      <strong>{user?.name || "User"}</strong>
+                      <small>{user?.email || roleLabel}</small>
                     </p>
                   </div>
                   <button type="button" role="menuitem" onClick={() => navigateTo(routes.profile)}>

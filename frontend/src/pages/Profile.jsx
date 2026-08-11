@@ -6,6 +6,7 @@ import { useAuth } from "../context/auth";
 const Profile = () => {
   const { user, updateProfile } = useAuth();
   const [name, setName] = useState(user?.name || "");
+  const [previewImage, setPreviewImage] = useState(user?.profileImage || "");
   const [message, setMessage] = useState("");
   const [saving, setSaving] = useState(false);
 
@@ -21,6 +22,7 @@ const Profile = () => {
     const reader = new FileReader();
     reader.onload = async () => {
       setSaving(true);
+      setPreviewImage(reader.result);
       try {
         await updateProfile({ profileImage: reader.result });
         setMessage("Profile image updated.");
@@ -60,14 +62,14 @@ const Profile = () => {
 
         <section className="detail-card">
           <div className="profile-hero">
-            {user?.profileImage ? (
-              <img className="profile-image" src={user.profileImage} alt={user?.name || "Profile"} />
+            {previewImage ? (
+              <img className="profile-image" src={previewImage} alt={user?.name || "Profile"} />
             ) : (
               <span className="avatar large">{user?.name?.charAt(0)?.toUpperCase() || "A"}</span>
             )}
             <div>
-              <h2>{user?.name || "Admin User"}</h2>
-              <p>{user?.email || "Administrator"}</p>
+              <h2>{user?.name || "User"}</h2>
+              <p>{user?.email || "User"}</p>
             </div>
           </div>
 

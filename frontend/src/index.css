@@ -1091,9 +1091,14 @@ td:first-child {
 }
 
 .profile-image {
+  aspect-ratio: 1;
+  border: 3px solid #dbeafe;
   border-radius: 50%;
+  display: block;
+  flex: 0 0 auto;
   height: 86px;
   object-fit: cover;
+  object-position: center;
   width: 86px;
 }
 
