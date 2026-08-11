@@ -6,7 +6,7 @@ import { navigateTo, routes } from "../routes";
 
 const Register = () => {
   const { register } = useAuth();
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [form, setForm] = useState({ name: "", email: "", password: "", role: "user" });
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
@@ -40,6 +40,21 @@ const Register = () => {
           <p>Register to manage employees</p>
 
           {error && <div className="alert">{error}</div>}
+
+          <label>
+            Account Type
+            <span className="field select-field">
+              <Icon name="user" size={16} />
+              <select
+                value={form.role}
+                onChange={(event) => setForm({ ...form, role: event.target.value })}
+                required
+              >
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+              </select>
+            </span>
+          </label>
 
           <label>
             Full Name
@@ -84,7 +99,7 @@ const Register = () => {
           </label>
 
           <button className="primary-button" type="submit" disabled={submitting}>
-            {submitting ? "Creating..." : "Sign up"}
+            {submitting ? "Creating..." : `Create ${form.role === "admin" ? "Admin" : "User"} Account`}
           </button>
 
           <p className="switch-auth">

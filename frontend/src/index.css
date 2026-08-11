@@ -163,6 +163,7 @@ label span {
 }
 
 .field input,
+.field select,
 .search-box input,
 .employee-form input,
 .employee-form select {
@@ -170,6 +171,29 @@ label span {
   color: var(--text);
   outline: 0;
   width: 100%;
+}
+
+.select-field select {
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.select-field {
+  position: relative;
+}
+
+.select-field::after {
+  border-bottom: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+  content: "";
+  height: 8px;
+  pointer-events: none;
+  position: absolute;
+  right: 18px;
+  top: 21px;
+  transform: rotate(45deg);
+  width: 8px;
 }
 
 .field button,

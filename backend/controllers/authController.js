@@ -15,10 +15,14 @@ const createToken = (user) =>
 
 exports.register = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, role = "user" } = req.body;
 
     if (!name || !email || !password) {
       return res.status(400).json({ message: "Name, email and password are required" });
+    }
+
+    if (!["admin", "user"].includes(role)) {
+      return res.status(400).json({ message: "Please choose a valid account type" });
     }
 
     const existingUser = await User.findOne({ where: { email } });
@@ -26,13 +30,12 @@ exports.register = async (req, res) => {
       return res.status(409).json({ message: "An account with this email already exists" });
     }
 
-    const userCount = await User.count();
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({
       name,
       email,
       password: hashedPassword,
-      role: userCount === 0 ? "admin" : "user",
+      role,
     });
 
     return res.status(201).json({
@@ -46,10 +49,14 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, role } = req.body;
 
     if (!email || !password) {
       return res.status(400).json({ message: "Email and password are required" });
+    }
+
+    if (role && !["admin", "user"].includes(role)) {
+      return res.status(400).json({ message: "Please choose a valid login type" });
     }
 
     const user = await User.findOne({ where: { email } });
@@ -60,6 +67,12 @@ exports.login = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    if (role && user.role !== role) {
+      return res.status(403).json({
+        message: `This account is registered as ${user.role}. Please choose the correct login type.`,
+      });
     }
 
     return res.json({

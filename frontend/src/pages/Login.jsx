@@ -7,7 +7,7 @@ import { api } from "../services/api";
 
 const Login = () => {
   const { login } = useAuth();
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [form, setForm] = useState({ email: "", password: "", role: "user" });
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(false);
   const [error, setError] = useState("");
@@ -62,6 +62,21 @@ const Login = () => {
           {error && <div className="alert">{error}</div>}
 
           <label>
+            Login Type
+            <span className="field select-field">
+              <Icon name="user" size={16} />
+              <select
+                value={form.role}
+                onChange={(event) => setForm({ ...form, role: event.target.value })}
+                required
+              >
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+              </select>
+            </span>
+          </label>
+
+          <label>
             Email
             <span className="field">
               <Icon name="mail" size={16} />
@@ -114,7 +129,7 @@ const Login = () => {
           </div>
 
           <button className="primary-button" type="submit" disabled={submitting}>
-            {submitting ? "Signing in..." : "Login"}
+            {submitting ? "Signing in..." : `Login as ${form.role === "admin" ? "Admin" : "User"}`}
           </button>
 
           <p className="switch-auth">
