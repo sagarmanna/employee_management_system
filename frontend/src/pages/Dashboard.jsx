@@ -4,6 +4,7 @@ import { Icon } from "../components/Icons";
 import Loader from "../components/Loader";
 import Navbar from "../components/Navbar";
 import { useAuth } from "../context/auth";
+import { useTheme } from "../context/theme";
 import { navigateTo, routes } from "../routes";
 import { api } from "../services/api";
 
@@ -14,7 +15,8 @@ const money = new Intl.NumberFormat("en-IN", {
 });
 
 const Dashboard = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const { isDark, toggleTheme } = useTheme();
   const [employees, setEmployees] = useState([]);
   const [stats, setStats] = useState({
     totalEmployees: 0,
@@ -25,6 +27,7 @@ const Dashboard = () => {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
 
   const loadData = async (term = search) => {
     setLoading(true);
@@ -51,6 +54,17 @@ const Dashboard = () => {
     const timer = setTimeout(() => loadData(search), 250);
     return () => clearTimeout(timer);
   }, [search]);
+
+  useEffect(() => {
+    const closeMenu = (event) => {
+      if (!event.target.closest(".user-menu")) {
+        setUserMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("click", closeMenu);
+    return () => document.removeEventListener("click", closeMenu);
+  }, []);
 
   const activePercent = useMemo(() => {
     if (!stats.totalEmployees) return "0%";
@@ -82,11 +96,47 @@ const Dashboard = () => {
           <div className="top-actions">
             <button className="plain-icon" type="button" title="Search"><Icon name="search" /></button>
             <button className="plain-icon notification" type="button" title="Notifications"><Icon name="bell" /></button>
-            <span className="user-chip">
-              <span className="avatar small">{user?.name?.charAt(0)?.toUpperCase() || "A"}</span>
-              <span><strong>{user?.name || "Admin User"}</strong><small>Administrator</small></span>
-              <Icon name="chevron" size={14} />
-            </span>
+            <div className="user-menu">
+              <button
+                className="user-chip"
+                type="button"
+                onClick={() => setUserMenuOpen((open) => !open)}
+                aria-expanded={userMenuOpen}
+                aria-haspopup="menu"
+              >
+                <span className="avatar small">{user?.name?.charAt(0)?.toUpperCase() || "A"}</span>
+                <span><strong>{user?.name || "Admin User"}</strong><small>Administrator</small></span>
+                <Icon name="chevron" size={14} />
+              </button>
+
+              {userMenuOpen && (
+                <div className="user-dropdown" role="menu">
+                  <div className="dropdown-head">
+                    <span className="avatar small">{user?.name?.charAt(0)?.toUpperCase() || "A"}</span>
+                    <p>
+                      <strong>{user?.name || "Admin User"}</strong>
+                      <small>{user?.email || "Administrator"}</small>
+                    </p>
+                  </div>
+                  <button type="button" role="menuitem">
+                    <Icon name="user" size={17} />
+                    Profile
+                  </button>
+                  <button type="button" role="menuitem">
+                    <Icon name="settings" size={17} />
+                    Settings
+                  </button>
+                  <button type="button" role="menuitem" onClick={toggleTheme}>
+                    <Icon name="moon" size={17} />
+                    {isDark ? "Light Mode" : "Dark Mode"}
+                  </button>
+                  <button className="danger" type="button" role="menuitem" onClick={logout}>
+                    <Icon name="logout" size={17} />
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </header>
 

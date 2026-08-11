@@ -446,9 +446,13 @@ label span {
 
 .user-chip {
   align-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--text);
   display: flex;
   gap: 12px;
   font-size: 14px;
+  padding: 4px;
 }
 
 .user-chip strong,
@@ -459,6 +463,71 @@ label span {
 .user-chip small {
   color: var(--muted);
   font-size: 12px;
+}
+
+.user-menu {
+  position: relative;
+}
+
+.user-dropdown {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  min-width: 240px;
+  padding: 8px;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 12px);
+  z-index: 20;
+}
+
+.dropdown-head {
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  gap: 12px;
+  margin-bottom: 8px;
+  padding: 10px;
+}
+
+.dropdown-head p {
+  margin: 0;
+  min-width: 0;
+}
+
+.dropdown-head strong,
+.dropdown-head small {
+  display: block;
+}
+
+.dropdown-head small {
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-dropdown button {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  color: var(--text);
+  display: flex;
+  gap: 10px;
+  height: 42px;
+  padding: 0 10px;
+  text-align: left;
+  width: 100%;
+}
+
+.user-dropdown button:hover {
+  background: #eef4ff;
+}
+
+.user-dropdown .danger {
+  color: var(--red);
 }
 
 .avatar {
@@ -889,6 +958,16 @@ td:first-child {
   background: rgba(9, 19, 36, 0.82);
   border-color: #243a61;
   color: var(--text);
+}
+
+:root[data-theme="dark"] .user-dropdown {
+  background: #0b1528;
+  border-color: #243a61;
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.45);
+}
+
+:root[data-theme="dark"] .user-dropdown button:hover {
+  background: rgba(47, 128, 255, 0.14);
 }
 
 :root[data-theme="dark"] input,
