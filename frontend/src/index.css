@@ -467,6 +467,81 @@ label span {
   width: 9px;
 }
 
+.notification-menu {
+  position: relative;
+}
+
+.notification-dropdown {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  min-width: 320px;
+  overflow: hidden;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 12px);
+  z-index: 20;
+}
+
+.notification-dropdown header {
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 16px;
+}
+
+.notification-dropdown h2 {
+  font-size: 16px;
+  margin: 0;
+}
+
+.notification-dropdown header button {
+  background: transparent;
+  border: 0;
+  color: var(--blue);
+  font-weight: 700;
+  padding: 0;
+}
+
+.notification-list {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+}
+
+.notification-list article {
+  align-items: center;
+  border-radius: 8px;
+  display: flex;
+  gap: 12px;
+  padding: 10px;
+}
+
+.notification-list article:hover {
+  background: #f2f6ff;
+}
+
+.notification-list .stat-icon {
+  height: 40px;
+  width: 40px;
+}
+
+.notification-list p {
+  margin: 0;
+}
+
+.notification-list strong,
+.notification-list small {
+  display: block;
+}
+
+.notification-list small {
+  color: var(--muted);
+  margin-top: 3px;
+}
+
 .user-chip {
   align-items: center;
   background: transparent;
@@ -1254,6 +1329,16 @@ td:first-child {
   background: #0b1528;
   border-color: #243a61;
   box-shadow: 0 20px 44px rgba(0, 0, 0, 0.45);
+}
+
+:root[data-theme="dark"] .notification-dropdown {
+  background: #0b1528;
+  border-color: #243a61;
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.45);
+}
+
+:root[data-theme="dark"] .notification-list article:hover {
+  background: rgba(47, 128, 255, 0.14);
 }
 
 :root[data-theme="dark"] .user-dropdown button:hover {

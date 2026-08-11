@@ -28,6 +28,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [notificationOpen, setNotificationOpen] = useState(false);
   const [actionModal, setActionModal] = useState(null);
   const [actionMessage, setActionMessage] = useState("");
 
@@ -61,6 +62,9 @@ const Dashboard = () => {
     const closeMenu = (event) => {
       if (!event.target.closest(".user-menu")) {
         setUserMenuOpen(false);
+      }
+      if (!event.target.closest(".notification-menu")) {
+        setNotificationOpen(false);
       }
     };
 
@@ -133,6 +137,7 @@ const Dashboard = () => {
   const canManageEmployees = user?.role === "admin";
 
   const recentEmployees = employees.slice(0, 3);
+  const notificationItems = employees.slice(0, 5);
   const departmentRows = useMemo(() => {
     const counts = employees.reduce((result, employee) => {
       result[employee.department] = (result[employee.department] || 0) + 1;
@@ -151,7 +156,44 @@ const Dashboard = () => {
           <h1>Dashboard</h1>
           <div className="top-actions">
             <button className="plain-icon" type="button" title="Search"><Icon name="search" /></button>
-            <button className="plain-icon notification" type="button" title="Notifications"><Icon name="bell" /></button>
+            <div className="notification-menu">
+              <button
+                className="plain-icon notification"
+                type="button"
+                title="Notifications"
+                onClick={() => setNotificationOpen((open) => !open)}
+                aria-expanded={notificationOpen}
+                aria-haspopup="menu"
+              >
+                <Icon name="bell" />
+              </button>
+
+              {notificationOpen && (
+                <div className="notification-dropdown" role="menu">
+                  <header>
+                    <h2>Notifications</h2>
+                    <button type="button" onClick={() => setActionModal("activity")}>View All</button>
+                  </header>
+                  {notificationItems.length ? (
+                    <div className="notification-list">
+                      {notificationItems.map((employee) => (
+                        <article key={employee.id}>
+                          <span className="stat-icon green"><Icon name="plus" size={16} /></span>
+                          <p>
+                            <strong>{employee.name}</strong>
+                            <small>
+                              {employee.department} employee record updated
+                            </small>
+                          </p>
+                        </article>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="empty-state compact">No notifications yet.</div>
+                  )}
+                </div>
+              )}
+            </div>
             <div className="user-menu">
               <button
                 className="user-chip"
